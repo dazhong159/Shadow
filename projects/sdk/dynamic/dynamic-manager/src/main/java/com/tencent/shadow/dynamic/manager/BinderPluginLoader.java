@@ -20,6 +20,7 @@ package com.tencent.shadow.dynamic.manager;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
@@ -209,6 +210,21 @@ class BinderPluginLoader implements PluginLoader {
             _data.writeInterfaceToken(DESCRIPTOR);
             intent.writeToParcel(_data, 0);
             mRemote.transact(TRANSACTION_startActivityInPluginProcess, _data, _reply, 0);
+            _reply.readException();
+        } finally {
+            _reply.recycle();
+            _data.recycle();
+        }
+    }
+
+    @Override
+    public void doAction(Bundle bundle) throws RemoteException {
+        Parcel _data = Parcel.obtain();
+        Parcel _reply = Parcel.obtain();
+        try {
+            _data.writeInterfaceToken(DESCRIPTOR);
+            _data.writeBundle(bundle);
+            mRemote.transact(TRANSACTION_doAction, _data, _reply, 0);
             _reply.readException();
         } finally {
             _reply.recycle();

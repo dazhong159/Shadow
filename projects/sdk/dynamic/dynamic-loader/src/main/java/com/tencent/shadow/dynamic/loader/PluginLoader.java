@@ -24,6 +24,7 @@ package com.tencent.shadow.dynamic.loader;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -40,6 +41,7 @@ public interface PluginLoader {
     int TRANSACTION_bindPluginService = (IBinder.FIRST_CALL_TRANSACTION + 6);
     int TRANSACTION_unbindService = (IBinder.FIRST_CALL_TRANSACTION + 7);
     int TRANSACTION_startActivityInPluginProcess = (IBinder.FIRST_CALL_TRANSACTION + 8);
+    int TRANSACTION_doAction = (IBinder.FIRST_CALL_TRANSACTION + 9);
 
 
     void loadPlugin(String partKey) throws RemoteException;
@@ -60,4 +62,5 @@ public interface PluginLoader {
 
     void startActivityInPluginProcess(Intent intent) throws RemoteException;
 
+    void doAction(Bundle bundle) throws RemoteException;
 }

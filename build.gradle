@@ -41,3 +41,9 @@ task clean(type: Delete) {
     dependsOn gradle.includedBuild('dynamic').task(':dynamic-loader-impl:clean')
     dependsOn gradle.includedBuild('dynamic').task(':dynamic-manager:clean')
 }
+
+allprojects {
+    repositories {
+        maven { url 'https://mirrors.tencent.com/repository/maven/thirdparty' }
+    }
+}

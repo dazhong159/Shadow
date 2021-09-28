@@ -18,15 +18,37 @@
 
 package com.tencent.shadow.sample.plugin.app.lib.usecases.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import android.util.Log;
+import android.widget.FrameLayout.LayoutParams;
+import com.qq.e.ads.banner2.UnifiedBannerADListener;
+import com.qq.e.ads.banner2.UnifiedBannerView;
+import com.qq.e.ads.rewardvideo.RewardVideoAD;
+import com.qq.e.ads.rewardvideo.RewardVideoADListener;
+import com.qq.e.comm.constants.CustomPkgConstants;
+import com.qq.e.comm.managers.GDTADManager;
+import com.qq.e.comm.util.AdError;
+import com.qq.e.union.adapter.util.PxUtils;
 import com.tencent.shadow.sample.plugin.app.lib.R;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.cases.entity.UseCase;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.util.ToastUtil;
+import java.util.Map;
 
 public class TestActivityOnCreate extends Activity {
+
+    private static final String TAG = "TestActivityOnCreate";
+    private static final String APP_ID = "1200021041";
+    private static boolean initialized = false;
+    private RewardVideoAD rewardVideoAD;
+
+    private UnifiedBannerView unifiedBannerView;
 
     public static class Case extends UseCase{
         @Override
@@ -45,11 +67,117 @@ public class TestActivityOnCreate extends Activity {
         }
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_lifecycle);
         ToastUtil.showToast(this,"onCreate");
+
+        initInner();
+
+
+        rewardVideoAD = new RewardVideoAD(this, "100315",
+                new RewardVideoADListener() {
+                    @Override
+                    public void onADClick() {
+                        Log.i(TAG, "onADClick");
+                    }
+
+                    @Override
+                    public void onADClose() {
+
+                    }
+
+                    @Override
+                    public void onADExpose() {
+                        Log.i(TAG, "onADExpose");
+                    }
+
+                    @Override
+                    public void onADLoad() {
+                        Log.i(TAG, "onADLoad");
+                        rewardVideoAD.showAD();
+                    }
+
+                    @Override
+                    public void onADShow() {
+
+                    }
+
+                    @Override
+                    public void onError(AdError adError) {
+                        if (adError != null) {
+                            Log.i(TAG, "onError " + adError.getErrorCode() + ", " + adError
+                                    .getErrorMsg());
+                        }
+                    }
+
+                    @Override
+                    public void onReward(Map<String, Object> map) {
+
+                    }
+
+                    @Override
+                    public void onVideoCached() {
+
+                    }
+
+                    @Override
+                    public void onVideoComplete() {
+
+                    }
+                }, true);
+        rewardVideoAD.loadAD();
+
+        unifiedBannerView = new UnifiedBannerView(this, "100298", new UnifiedBannerADListener() {
+            @Override
+            public void onADClicked() {
+
+            }
+
+            @Override
+            public void onADCloseOverlay() {
+
+            }
+
+            @Override
+            public void onADClosed() {
+
+            }
+
+            @Override
+            public void onADExposure() {
+
+            }
+
+            @Override
+            public void onADLeftApplication() {
+
+            }
+
+            @Override
+            public void onADOpenOverlay() {
+
+            }
+
+            @Override
+            public void onADReceive() {
+                Log.i(TAG, "onADReceive"
+                        + ", ecpm = " + unifiedBannerView.getECPM()
+                        + ", ecpmLevel = " + unifiedBannerView.getECPMLevel()
+                        + ", adn = " + unifiedBannerView.getAdNetWorkName());
+            }
+
+            @Override
+            public void onNoAD(AdError adError) {
+                Log.i(TAG, "onNoAD");
+            }
+        });
+        LayoutParams layoutParams = new LayoutParams(PxUtils.dpToPx(this, 1080),
+                PxUtils.dpToPx(this, 100));
+        addContentView(unifiedBannerView, layoutParams);
+        unifiedBannerView.loadAD();
     }
 
     @Override
@@ -92,5 +220,13 @@ public class TestActivityOnCreate extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         ToastUtil.showToast(this,"onDestroy");
+    }
+
+    public void initInner() {
+        if (!initialized) {
+            Log.i(TAG, "initInner");
+            GDTADManager.getInstance().initWith(getApplicationContext(), APP_ID);
+            initialized = true;
+        }
     }
 }

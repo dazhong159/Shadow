@@ -21,6 +21,7 @@ package com.tencent.shadow.sample.manager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -56,7 +57,7 @@ public class SamplePluginManager extends FastPluginManager {
      */
     @Override
     public String getAbi() {
-        return "";
+        return "arm64-v8a";
     }
 
     /**
@@ -84,6 +85,14 @@ public class SamplePluginManager extends FastPluginManager {
             close();
         } else {
             throw new IllegalArgumentException("不认识的fromId==" + fromId);
+        }
+    }
+
+    private void doAction() {
+        try {
+            mPluginLoader.doAction(new Bundle());
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
@@ -116,6 +125,8 @@ public class SamplePluginManager extends FastPluginManager {
                     }
 
                     startPluginActivity(installedPlugin, partKey, pluginIntent);
+
+                    doAction();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

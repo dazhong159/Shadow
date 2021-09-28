@@ -136,6 +136,12 @@ internal class PluginLoaderBinder(private val mDynamicPluginLoader: DynamicPlugi
                 reply!!.writeNoException()
                 return true
             }
+            PluginLoader.TRANSACTION_doAction -> {
+                data.enforceInterface(PluginLoader.DESCRIPTOR)
+                mDynamicPluginLoader.doAction(data.readBundle())
+                reply!!.writeNoException()
+                return true
+            }
         }
         return super.onTransact(code, data, reply, flags)
     }

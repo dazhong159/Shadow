@@ -20,6 +20,8 @@ package com.tencent.shadow.sample.plugin.app.lib.gallery;
 
 import android.app.Application;
 
+import android.content.Context;
+import androidx.multidex.MultiDex;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.cases.UseCaseManager;
 
 public class TestApplication extends Application {
@@ -34,6 +36,12 @@ public class TestApplication extends Application {
         isOnCreate = true;
         super.onCreate();
         UseCaseManager.initCase();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static TestApplication getInstance() {

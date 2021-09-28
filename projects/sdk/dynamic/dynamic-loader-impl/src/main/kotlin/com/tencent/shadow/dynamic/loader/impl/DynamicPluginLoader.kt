@@ -22,6 +22,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -188,6 +189,25 @@ internal class DynamicPluginLoader(hostContext: Context, uuid: String) {
     fun startActivityInPluginProcess(intent: Intent) {
         mUiHandler.post {
             mContext.startActivity(intent)
+        }
+    }
+
+    @Synchronized
+    fun doAction(bundle: Bundle?) {
+        mUiHandler.post {
+            try {
+                val interfaceImplementClass = mPluginLoader.getPluginParts("sample-plugin-app")?.classLoader?.loadClass("com.tencent.shadow.sample.plugin.app.lib.Test")
+                val doActionMethod = interfaceImplementClass?.getMethod("doAction", Bundle::class.java)
+                doActionMethod?.invoke(null, bundle)
+            } catch (e: ClassNotFoundException) {
+                throw Exception(e)
+            } catch (e: InstantiationException) {
+                throw Exception(e)
+            } catch (e: ClassCastException) {
+                throw Exception(e)
+            } catch (e: IllegalAccessException) {
+                throw Exception(e)
+            }
         }
     }
 
