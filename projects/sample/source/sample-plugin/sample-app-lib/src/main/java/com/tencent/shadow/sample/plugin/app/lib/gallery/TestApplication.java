@@ -21,9 +21,7 @@ package com.tencent.shadow.sample.plugin.app.lib.gallery;
 import android.app.Application;
 
 import android.content.Context;
-import android.util.Log;
 import androidx.multidex.MultiDex;
-import com.qq.e.comm.managers.GDTADManager;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.cases.UseCaseManager;
 
 public class TestApplication extends Application {
@@ -31,8 +29,6 @@ public class TestApplication extends Application {
     private static TestApplication sInstence;
 
     public boolean isOnCreate;
-    private static final String APP_ID = "1200021041";
-    private final String TAG = "TestApplication";
 
     @Override
     public void onCreate() {
@@ -40,18 +36,12 @@ public class TestApplication extends Application {
         isOnCreate = true;
         super.onCreate();
         UseCaseManager.initCase();
-        initInner();
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-    }
-
-    public void initInner() {
-        boolean r = GDTADManager.getInstance().initWith(getApplicationContext(), APP_ID);
-        Log.e(TAG, "initInner " + r);
     }
 
     public static TestApplication getInstance() {
