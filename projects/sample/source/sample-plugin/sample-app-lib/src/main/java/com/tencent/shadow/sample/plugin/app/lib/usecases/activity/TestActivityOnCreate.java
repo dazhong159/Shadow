@@ -44,8 +44,6 @@ import java.util.Map;
 public class TestActivityOnCreate extends Activity {
 
     private static final String TAG = "TestActivityOnCreate";
-    private static final String APP_ID = "1200021041";
-    private static boolean initialized = false;
     private RewardVideoAD rewardVideoAD;
 
     private UnifiedBannerView unifiedBannerView;
@@ -73,9 +71,7 @@ public class TestActivityOnCreate extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_lifecycle);
         ToastUtil.showToast(this,"onCreate");
-
-        initInner();
-
+        Log.e(TAG, "onCreate");
 
         rewardVideoAD = new RewardVideoAD(this, "100315",
                 new RewardVideoADListener() {
@@ -220,13 +216,5 @@ public class TestActivityOnCreate extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         ToastUtil.showToast(this,"onDestroy");
-    }
-
-    public void initInner() {
-        if (!initialized) {
-            Log.i(TAG, "initInner");
-            GDTADManager.getInstance().initWith(getApplicationContext(), APP_ID);
-            initialized = true;
-        }
     }
 }

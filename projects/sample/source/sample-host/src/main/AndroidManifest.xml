@@ -87,14 +87,11 @@
             android:authorities="${applicationId}.contentprovider.authority.dynamic"
             android:name="com.tencent.shadow.core.runtime.container.PluginContainerContentProvider"
             android:grantUriPermissions="true"
-            android:process=":plugin"
             />
-        <service android:name="com.tencent.shadow.sample.host.PluginProcessPPS"
-            android:process=":plugin"
+        <service android:name="com.tencent.shadow.sample.host.PluginProcessPPS"/>
             />
         <service
-            android:name="com.tencent.shadow.sample.host.Plugin2ProcessPPS"
-            android:process=":plugin2" />
+            android:name="com.tencent.shadow.sample.host.Plugin2ProcessPPS"/>
         <activity
             android:name="com.tencent.shadow.sample.host.PluginLoadActivity"
             android:launchMode="standard"
