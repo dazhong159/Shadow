@@ -196,6 +196,12 @@ internal class DynamicPluginLoader(hostContext: Context, uuid: String) {
     fun doAction(bundle: Bundle?) {
         mUiHandler.post {
             try {
+                val manager = mPluginLoader.getPluginParts("sample-plugin-app")?.classLoader?.loadClass("com.qq.e.comm.managers.GDTADManager")
+                val obj = manager?.getMethod("getInstance")?.invoke(null);
+                manager?.getMethod("initWith", Context::class.java, String::class.java)?.invoke(obj, mContext, "1200021041");
+
+                Thread.sleep(200);
+
                 val interfaceImplementClass = mPluginLoader.getPluginParts("sample-plugin-app")?.classLoader?.loadClass("com.tencent.shadow.sample.plugin.app.lib.Test")
                 val doActionMethod = interfaceImplementClass?.getMethod("doAction", Bundle::class.java)
                 doActionMethod?.invoke(null, bundle)
@@ -206,6 +212,8 @@ internal class DynamicPluginLoader(hostContext: Context, uuid: String) {
             } catch (e: ClassCastException) {
                 throw Exception(e)
             } catch (e: IllegalAccessException) {
+                throw Exception(e)
+            } catch (e: Exception){
                 throw Exception(e)
             }
         }
